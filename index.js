@@ -6,6 +6,7 @@ const resolve    = require('rollup-plugin-node-resolve');
 const progress   = require('rollup-plugin-progress');
 const uglify     = require('rollup-plugin-uglify');
 const cleanup    = require('rollup-plugin-cleanup');
+const json       = require('rollup-plugin-json');
 const { minify } = require('uglify-es');
 
 const _getPathWithCustomSuffx = (p, sffx) => {
@@ -21,6 +22,7 @@ const generateTargetPlugins = target => [
     babel(Object.assign(babelrc(target), {
         exclude: 'node_modules/**'
     })),
+    json({ indent: '    ' }),
     resolve(),
     commonjs(),
     cleanup()

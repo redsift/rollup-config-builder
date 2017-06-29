@@ -1,3 +1,6 @@
+## 0.2.0 (unreleased)
+- Add json files support.
+
 ## 0.1.1 (2017-06-29)
 - Add missing `external-helpers` dependency.
 

@@ -1,3 +1,9 @@
+## 0.3.0 (2017-08-01)
+- __Breaking:__ Force named exports even with a single default export.
+- Add installation and usage guide in the `README.md`.
+- Update ESLint to 4.3.0.
+- Update uglify-es.
+
 ## 0.2.0 (2017-06-30)
 - Add json files support.
 

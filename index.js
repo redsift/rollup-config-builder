@@ -17,6 +17,10 @@ const _getPathWithCustomSuffx = (p, sffx) => {
     return path.format(parts);
 };
 
+const globalOptions = {
+    exports: 'named'
+};
+
 const generateTargetPlugins = target => [
     progress(),
     babel(Object.assign(babelrc(target), {
@@ -45,7 +49,7 @@ module.exports = function (baseOptions) {
         }
     ];
     targets.forEach((targetOptions) => {
-        const options      = Object.assign({}, baseOptions, targetOptions);
+        const options      = Object.assign({}, globalOptions, baseOptions, targetOptions);
         const withMinified = options.withMinified || false;
         delete options.withMinified;
         configs.push(options);

@@ -1,4 +1,4 @@
-## 0.3.0 (unreleased)
+## 0.3.0 (2017-08-01)
 - __Breaking:__ Force named exports even with a single default export.
 - Add installation and usage guide in the `README.md`.
 - Update ESLint to 4.3.0.

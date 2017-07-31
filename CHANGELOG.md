@@ -1,5 +1,6 @@
 ## 0.3.0 (unreleased)
 - __Breaking:__ Force named exports even with a single default export.
+- Add installation and usage guide in the `README.md`.
 
 ## 0.2.0 (2017-06-30)
 - Add json files support.

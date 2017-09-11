@@ -19,7 +19,9 @@ const _getPathWithSuffx = (p, sffx) => {
 };
 
 const globalOptions = {
-    exports: 'named'
+    output: {
+        exports: 'named'
+    }
 };
 
 const generateTargetPlugins = target => [

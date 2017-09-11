@@ -1,4 +1,4 @@
-## 0.4.0 (unreleased)
+## 0.4.0 (2017-09-11)
 - Update rollup to 0.49.
 - __Breaking:__ Changes in options, see https://rollupjs.org/#big-list-of-options
 - Add rollup to peerDependencies.

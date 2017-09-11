@@ -1,4 +1,5 @@
 const path       = require('path');
+const merge      = require('lodash.merge');
 const babel      = require('rollup-plugin-babel');
 const babelrc    = require('babelrc-targeted-rollup');
 const commonjs   = require('rollup-plugin-commonjs');
@@ -9,7 +10,7 @@ const cleanup    = require('rollup-plugin-cleanup');
 const json       = require('rollup-plugin-json');
 const { minify } = require('uglify-es');
 
-const _getPathWithCustomSuffx = (p, sffx) => {
+const _getPathWithSuffx = (p, sffx) => {
     const parts = path.parse(p);
     parts.name  = `${parts.name}.${sffx}`;
     delete parts.base;
@@ -33,33 +34,42 @@ const generateTargetPlugins = target => [
 ];
 
 module.exports = function (baseOptions) {
+    baseOptions = Object.assign({ output: { file: null, name: null } }, baseOptions);
+    if (!baseOptions.output.file) {
+        throw new Error(`You must specify options.output.file`);
+    }
+
     const configs = [];
     const targets = [
         {
-            dest         : baseOptions.dest,
-            format       : 'umd',
-            withMinified : true,
-            moduleName   : baseOptions.moduleName,
-            plugins      : generateTargetPlugins('browsers')
+            plugins : generateTargetPlugins('browsers'),
+            minify  : true,
+            output  : {
+                file   : baseOptions.output.file,
+                format : 'umd'
+            }
         },
         {
-            dest    : _getPathWithCustomSuffx(baseOptions.dest, 'es'),
-            format  : 'es',
-            plugins : generateTargetPlugins('node')
+            plugins : generateTargetPlugins('node'),
+            output  : {
+                file   : _getPathWithSuffx(baseOptions.output.file, 'es'),
+                format : 'es'
+            }
         }
     ];
     targets.forEach((targetOptions) => {
-        const options      = Object.assign({}, globalOptions, baseOptions, targetOptions);
-        const withMinified = options.withMinified || false;
-        delete options.withMinified;
+        const options = merge({}, globalOptions, baseOptions, targetOptions);
+
+        const withMinified = options.minify || false;
+        delete options.minify;
         configs.push(options);
 
         if (!withMinified) {
             return;
         }
 
-        const minOptions = Object.assign({}, options, {
-            dest: _getPathWithCustomSuffx(targetOptions.dest, 'min')
+        const minOptions = merge({}, options, {
+            output: { file: _getPathWithSuffx(options.output.file, 'min') }
         });
         minOptions.plugins = minOptions.plugins.slice(0);
         minOptions.plugins.push(uglify({}, minify));

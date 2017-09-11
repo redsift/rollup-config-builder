@@ -1,3 +1,6 @@
+## 0.4.1 (2017-09-11)
+- Fix the `exports` option position.
+
 ## 0.4.0 (2017-09-11)
 - Update rollup to 0.49.
 - __Breaking:__ Changes in options, see https://rollupjs.org/#big-list-of-options

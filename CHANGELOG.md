@@ -1,3 +1,7 @@
+## 0.4.0 (unreleased)
+- Update rollup to 0.49.
+- __Breaking:__ Changes in options, see https://rollupjs.org/#big-list-of-options
+
 ## 0.3.0 (2017-08-01)
 - __Breaking:__ Force named exports even with a single default export.
 - Add installation and usage guide in the `README.md`.

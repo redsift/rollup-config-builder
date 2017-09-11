@@ -19,9 +19,11 @@ import del         from 'del';
 
 del.sync(['./dist']);
 export default buildConfig({
-    entry      : `./src/my-module.js`,
-    dest       : `./dist/my-module.js`,
-    moduleName : 'MyModule'
+    entry  : `./src/my-module.js`,
+    output : {
+        file : `./dist/my-module.js`,
+        name : 'MyModule'
+    }
 });
 ```
 

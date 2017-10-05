@@ -1,7 +1,7 @@
 const path       = require('path');
 const merge      = require('lodash.merge');
 const babel      = require('rollup-plugin-babel');
-const babelrc    = require('babelrc-targeted-rollup');
+const babelrc    = require('babelrc-rollup');
 const commonjs   = require('rollup-plugin-commonjs');
 const resolve    = require('rollup-plugin-node-resolve');
 const progress   = require('rollup-plugin-progress');
@@ -10,7 +10,7 @@ const cleanup    = require('rollup-plugin-cleanup');
 const json       = require('rollup-plugin-json');
 const { minify } = require('uglify-es');
 
-const _getPathWithSuffx = (p, sffx) => {
+const _suffixPath = (p, sffx) => {
     const parts = path.parse(p);
     parts.name  = `${parts.name}.${sffx}`;
     delete parts.base;
@@ -21,19 +21,18 @@ const _getPathWithSuffx = (p, sffx) => {
 const globalOptions = {
     output: {
         exports: 'named'
-    }
+    },
+    plugins: [
+        progress(),
+        babel(Object.assign(babelrc(), {
+            exclude: 'node_modules/**'
+        })),
+        json({ indent: '    ' }),
+        resolve(),
+        commonjs(),
+        cleanup()
+    ]
 };
-
-const generateTargetPlugins = target => [
-    progress(),
-    babel(Object.assign(babelrc(target), {
-        exclude: 'node_modules/**'
-    })),
-    json({ indent: '    ' }),
-    resolve(),
-    commonjs(),
-    cleanup()
-];
 
 module.exports = function (baseOptions) {
     baseOptions = Object.assign({ output: { file: null, name: null } }, baseOptions);
@@ -42,36 +41,19 @@ module.exports = function (baseOptions) {
     }
 
     const configs = [];
-    const targets = [
-        {
-            plugins : generateTargetPlugins('browsers'),
-            minify  : true,
-            output  : {
-                file   : baseOptions.output.file,
-                format : 'umd'
-            }
-        },
-        {
-            plugins : generateTargetPlugins('node'),
-            output  : {
-                file   : _getPathWithSuffx(baseOptions.output.file, 'es'),
-                format : 'es'
-            }
-        }
+    const outputs = [
+        { format: 'umd', file: baseOptions.output.file },
+        { format: 'es', file: _suffixPath(baseOptions.output.file, 'es') }
     ];
-    targets.forEach((targetOptions) => {
-        const options = merge({}, globalOptions, baseOptions, targetOptions);
+    outputs.forEach((output) => {
+        const options = merge({}, baseOptions, globalOptions, { output });
 
-        const withMinified = options.minify || false;
-        delete options.minify;
-        configs.push(options);
-
-        if (!withMinified) {
+        if (output.format !== 'umd') {
             return;
         }
 
         const minOptions = merge({}, options, {
-            output: { file: _getPathWithSuffx(options.output.file, 'min') }
+            output: { file: _suffixPath(output.file, 'min') }
         });
         minOptions.plugins = minOptions.plugins.slice(0);
         minOptions.plugins.push(uglify({}, minify));

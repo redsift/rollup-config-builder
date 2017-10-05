@@ -8,8 +8,7 @@ yarn add --dev rollup rollup-config-builder
 
 ## Usage
 
-Your project need to have Babel configured.  
-Please see [`babelrc-targeted-rollup`](https://www.npmjs.com/package/babelrc-targeted-rollup) for optimal configuration.
+Your project need to have Babel configured.
 
 Then, in your ___rollup.config.js___:
 

@@ -1,4 +1,4 @@
-## 0.5.0 (unreleased)
+## 0.5.0 (2017-10-05)
 - Change the way options passed to the lib are handled.  
   Theses options are now overwrited by the lib options in case of conflict.
 - Fix a bug with the `.es.js` version, that contained code not supported by IE 11.  

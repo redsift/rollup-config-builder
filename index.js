@@ -1,7 +1,7 @@
 const path       = require('path');
 const merge      = require('lodash.merge');
 const babel      = require('rollup-plugin-babel');
-const babelrc    = require('babelrc-rollup');
+const babelrc    = require('babelrc-rollup').default;
 const commonjs   = require('rollup-plugin-commonjs');
 const resolve    = require('rollup-plugin-node-resolve');
 const progress   = require('rollup-plugin-progress');
@@ -47,6 +47,7 @@ module.exports = function (baseOptions) {
     ];
     outputs.forEach((output) => {
         const options = merge({}, baseOptions, globalOptions, { output });
+        configs.push(options);
 
         if (output.format !== 'umd') {
             return;

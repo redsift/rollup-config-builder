@@ -3,6 +3,7 @@
   Theses options are now overwrited by the lib options in case of conflict.
 - Fix a bug with the `.es.js` version, that contained code not supported by IE 11.  
   (e.g. `class`, `let`)
+- Temporary fix a rollup regression with babel-helpers incorrectly included in packages.
 
 ## 0.4.1 (2017-09-11)
 - Fix the `exports` option position.

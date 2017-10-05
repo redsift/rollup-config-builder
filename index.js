@@ -1,14 +1,15 @@
-const path       = require('path');
-const merge      = require('lodash.merge');
-const babel      = require('rollup-plugin-babel');
-const babelrc    = require('babelrc-rollup').default;
-const commonjs   = require('rollup-plugin-commonjs');
-const resolve    = require('rollup-plugin-node-resolve');
-const progress   = require('rollup-plugin-progress');
-const uglify     = require('rollup-plugin-uglify');
-const cleanup    = require('rollup-plugin-cleanup');
-const json       = require('rollup-plugin-json');
-const { minify } = require('uglify-es');
+const path         = require('path');
+const merge        = require('lodash.merge');
+const babel        = require('rollup-plugin-babel');
+const babelrc      = require('babelrc-rollup').default;
+const babelHelpers = require('babel-helpers');
+const commonjs     = require('rollup-plugin-commonjs');
+const resolve      = require('rollup-plugin-node-resolve');
+const progress     = require('rollup-plugin-progress');
+const uglify       = require('rollup-plugin-uglify');
+const cleanup      = require('rollup-plugin-cleanup');
+const json         = require('rollup-plugin-json');
+const { minify }   = require('uglify-es');
 
 const _suffixPath = (p, sffx) => {
     const parts = path.parse(p);
@@ -25,7 +26,11 @@ const globalOptions = {
     plugins: [
         progress(),
         babel(Object.assign(babelrc(), {
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
+
+            // NOTE: @see https://github.com/rollup/rollup/issues/1595
+            externalHelpersWhitelist: babelHelpers.list
+                .filter(helperName => helperName !== 'asyncGenerator')
         })),
         json({ indent: '    ' }),
         resolve(),

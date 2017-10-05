@@ -1,6 +1,6 @@
 {
     "name"       : "rollup-config-builder",
-    "version"    : "0.4.1",
+    "version"    : "0.5.0",
     "main"       : "index.js",
     "license"    : "MIT",
     "author"     : "Donovan Lambert <d.lambert@cirize.com>",
@@ -10,8 +10,9 @@
     },
     "dependencies": {
         "babel-core"                    : "^6.26.0",
+        "babel-helpers"                 : "^6.24.1",
         "babel-plugin-external-helpers" : "^6.22.0",
-        "babelrc-targeted-rollup"       : "^0.1.2",
+        "babelrc-rollup"                : "^3.0.0",
         "lodash.merge"                  : "^4.6.0",
         "rollup-plugin-babel"           : "^3.0.2",
         "rollup-plugin-cleanup"         : "^1.0.1",

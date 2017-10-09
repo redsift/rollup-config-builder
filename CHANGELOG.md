@@ -1,4 +1,4 @@
-## 0.6.0 (unreleased)
+## 0.6.0 (2017-10-09)
 - Update the required version of rollup (`^0.50.0`).
 
 ## 0.5.0 (2017-10-05)

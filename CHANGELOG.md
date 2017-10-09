@@ -1,3 +1,6 @@
+## 0.6.0 (unreleased)
+- Update the required version of rollup (`^0.50.0`).
+
 ## 0.5.0 (2017-10-05)
 - Change the way options passed to the lib are handled.  
   Theses options are now overwrited by the lib options in case of conflict.

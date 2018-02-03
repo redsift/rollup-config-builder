@@ -23,16 +23,14 @@ const globalOptions = {
     },
 };
 
+
 const babelrc = {
-    presets: [
-        [
-            {
-                env: {
-                    modules: false,
-                },
-            },
-        ],
-    ],
+    presets: [["env", {
+        "modules": false,
+        // "targets": {
+        //   "browsers": ["last 1 versions"]
+        // }
+      }]],
     plugins: ['external-helpers'],
     exclude: 'node_modules/**',
     // NOTE: we use babel-plugin-transform-runtime to prevent clashes if 'babel-polyfill' is included via multiple bundles.
@@ -41,39 +39,62 @@ const babelrc = {
     babelrc: false,
 };
 
-// console.log('babelrc:', JSON.stringify(Object.assign(babelrc(), {
-//     exclude: 'node_modules/**',
-//     runtimeHelpers: true,
-// }), null, 4));
-
 module.exports = function(baseOptions) {
+    if (!baseOptions) {
+        baseOptions = require('./zero-config');
+    }
+
+    if (!baseOptions.input) {
+        console.log(chalk.red('\n\nConfiguration error:'));
+        console.log(chalk.red('--------------------'));
+        console.log(
+            chalk.red(
+                "\n  > You must specify an 'input' field if your entry point is different from './src/index.js'!\n\n"
+            )
+        );
+
+        return;
+    }
+
     baseOptions = Object.assign(
         { output: { file: null, name: null } },
         baseOptions
     );
+
     if (!baseOptions.output.file) {
-        throw new Error(`You must specify options.output.file`);
+        console.log(chalk.red('\n\nConfiguration error:'));
+        console.log(chalk.red('--------------------'));
+        console.log(
+            chalk.red("\n  > You have to specify an 'output.file' field!\n\n")
+        );
+
+        return;
     }
 
     const { namedExports } = baseOptions;
 
     const defaultPlugins = [
         progress(),
-        babel(babelrc),
         json({ indent: '    ' }),
+        babel(babelrc),
         resolve(),
         commonjs(namedExports ? { namedExports } : {}),
         cleanup(),
     ];
+
+    delete baseOptions.namedExports;
 
     const configs = [];
     const outputs = [
         { format: 'umd', file: _suffixPath(baseOptions.output.file, 'umd') },
         { format: 'es', file: _suffixPath(baseOptions.output.file, 'esm') },
     ];
+
     outputs.forEach(output => {
-        const options = baseOptions.plugins
-            ? merge({}, baseOptions, globalOptions, { output })
+        const options = false //baseOptions.plugins
+            ? merge({}, baseOptions, globalOptions, baseOptions.plugins, {
+                  output,
+              })
             : merge(
                   {},
                   baseOptions,
@@ -85,10 +106,6 @@ module.exports = function(baseOptions) {
               );
 
         configs.push(options);
-
-        // if (output.format !== 'umd') {
-        //     return;
-        // }
 
         const minOptions = merge({}, options, {
             output: { file: _suffixPath(output.file, 'min') },

@@ -4,6 +4,7 @@
 
 ```bash
 yarn add --dev rollup rollup-config-builder
+yarn add --dev babel-plugin-external-helpers // TODO: this is not picked up from the rollup-config-builder node_modules for some reason...
 ```
 
 ## Usage
@@ -18,7 +19,7 @@ import del         from 'del';
 
 del.sync(['./dist']);
 export default buildConfig({
-    entry  : `./src/my-module.js`,
+    input  : `./src/my-module.js`,
     output : {
         file : `./dist/my-module.js`,
         name : 'MyModule'

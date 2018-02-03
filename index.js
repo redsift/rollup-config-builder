@@ -46,21 +46,6 @@ const babelrc = {
 //     runtimeHelpers: true,
 // }), null, 4));
 
-const defaultPlugins = [
-    progress(),
-    babel(babelrc),
-    json({ indent: '    ' }),
-    resolve(),
-    commonjs({
-        namedExports: {
-            'node_modules/@redsift/rs-storage/dist/js/rs-storage.umd-es2015.min.js': [
-                'Storage',
-            ],
-        },
-    }),
-    cleanup(),
-];
-
 module.exports = function(baseOptions) {
     baseOptions = Object.assign(
         { output: { file: null, name: null } },
@@ -69,6 +54,17 @@ module.exports = function(baseOptions) {
     if (!baseOptions.output.file) {
         throw new Error(`You must specify options.output.file`);
     }
+
+    const { namedExports } = baseOptions;
+
+    const defaultPlugins = [
+        progress(),
+        babel(babelrc),
+        json({ indent: '    ' }),
+        resolve(),
+        commonjs(namedExports ? { namedExports } : {}),
+        cleanup(),
+    ];
 
     const configs = [];
     const outputs = [
